@@ -108,17 +108,17 @@ A series of Python objects for the construction, management, and serialization o
 > Returns a JSON-valid `dict` object representing this PKPass. `None` values will not be serialized.
 
 
-### PKBoardingPass ###
+### PKBoardingPass (PKPass) ###
 - `transitType`: Type of transit.
 
 
-### PKCoupon ###
+### PKCoupon (PKPass) ###
 
 
-### PKEventTicket ###
+### PKEventTicket (PKPass) ###
  
 
-### PKStoreCard ###
+### PKStoreCard (PKPass) ###
 
 
 ### PKPassBarcode ###
