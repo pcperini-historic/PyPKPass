@@ -1,0 +1,5 @@
+import PKPass
+import PKBoardingPass
+import PKCoupon
+import PKEventTicket
+import PKStoreCard
