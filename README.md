@@ -30,11 +30,13 @@ A series of Python objects for the construction, management, and serialization o
 - `backFields`: Fields to be on the back of the pass.
 
 **__init__**
+
     __init__(self, passTypeIdentifier, serialNumber)
 
 > Initializes a new PKPass object with the given `passTypeIdentifier` and `serialNumber`.
 
 **addRelevantLocation**
+
     addRelevantLocation(self, latitude, longitude, altitude = 0, relevantText = None)
 
 > Creates a new PKPassLocation and adds it to this PKPass's `locations` list.
@@ -45,6 +47,7 @@ A series of Python objects for the construction, management, and serialization o
 - `relevantText`: Text displayed on the lock screen when the pass is currently relevant. For example, a description of the nearby location such as “Store nearby on 1st and Main.”
 
 **setBarcode**
+
     setBarcode(self, message, format = "PKBarcodeFormatQR", messageEncoding = "iso-8859-1", altText = None)
     
 > Creates a new PKPassBarcode and sets it to this PKPass's `barcode` variable.
@@ -55,6 +58,7 @@ A series of Python objects for the construction, management, and serialization o
 - `altText`: Text displayed near the barcode. For example, a human-readable version of the barcode data in case the barcode doesn’t scan.
 
 **addField**
+
     addField(self, destination, key, value, label, changeMessage, textAlignment)
     
 > Creates a new PKPassField and adds it to `destination`.
@@ -67,32 +71,38 @@ A series of Python objects for the construction, management, and serialization o
 - `textAlignment`: Alignment for the field’s contents.
 
 **addHeaderField**
+
     addHeaderField(self, key, value, label = None, changeMessage = None, textAlignment = "PKTextAlignmentNatural")
 
 > Calls `addField` with this PKPass's `headerFields` variable as `destination`.
 
 **addPrimaryField**
+
     addPrimaryField(self, key, value, label = None, changeMessage = None, textAlignment = "PKTextAlignmentNatural")
 
 > Calls `addField` with this PKPass's `primaryFields` variable as `destination`.
 
 
 **addSecondaryField**
+
     addSecondaryField(self, key, value, label = None, changeMessage = None, textAlignment = "PKTextAlignmentNatural")
     
 > Calls `addField` with this PKPass's `secondaryFields` variable as `destination`.
 
 **addAuxiliaryField**
+
     addAuxiliaryField(self, key, value, label = None, changeMessage = None, textAlignment = "PKTextAlignmentNatural")
     
 > Calls `addField` with this PKPass's `auxiliaryFields` variable as `destination`.
 
 **addBackField**
+
     addBackField(self, key, value, label = None, changeMessage = None, textAlignment = "PKTextAlignmentNatural")
     
 > Calls `addField` with this PKPass's `backFields` variable as `destination`.
 
 **serialized**
+
     serialized(self)
     
 > Returns a JSON-valid `dict` object representing this PKPass. `None` values will not be serialized.
@@ -118,11 +128,13 @@ A series of Python objects for the construction, management, and serialization o
 - `altText`: Text displayed near the barcode. For example, a human-readable version of the barcode data in case the barcode doesn’t scan.
 
 **__init__**
+
     __init__(self, message, format = "PKBarcodeFormatQR", messageEncoding = "iso-8859-1", altText = None)
 
 > Initializes a new PKPassBarcode object with the given `message`, `format`, `messageEncoding`, and `altText`.
 
 **serialized**
+
     serialized(self)
     
 > Returns a JSON-valid `dict` object representing this PKPassBarcode. `None` values will not be serialized.
@@ -136,11 +148,13 @@ A series of Python objects for the construction, management, and serialization o
 - `textAlignment`: Alignment for the field’s contents.
 
 **__init__**
+
     __init__(self, key, value, label = None, changeMessage = None, textAlignment = "PKTextAlignmentNatural")
     
 > Initializes a new PKPassField object with the given `key`, `value`, `label`, `changeMessage`, and `textAlignment`.
 
 **setDateStyle**
+
     setDateStyle(self, dateStyle = "PKDateStyleFull", timeStyle = "PKTimeStyleFull", isRelative = True)
    
 > Adds date styling information to this PKPassField.
@@ -150,6 +164,7 @@ A series of Python objects for the construction, management, and serialization o
 - `isRelative`: If true, the label’s value is displayed as a relative date; otherwise, it is displayed as an absolute date.
 
 **setNumberStyle**
+
     setNumberStyle(self, currencyCode = "USD", numberStyle = "PKNumberStyleDecimal")
 
 > Adds number styling information to this PKPassField.
@@ -158,6 +173,7 @@ A series of Python objects for the construction, management, and serialization o
 - `numberStyle`: Style of number to display.
 
 **setBalance**
+
     setBalance(self, balance)
     
 > Sets the balance of this PKPassField. Only appropriate for use with `PKStoreCard`s.
@@ -172,11 +188,13 @@ A series of Python objects for the construction, management, and serialization o
 - `relevantText`: Text displayed on the lock screen when the pass is currently relevant. For example, a description of the nearby location such as “Store nearby on 1st and Main.”
 
 **__init__**
+
     __init__(self, latitude, longitude, altitude = 0, relevantText = None)
 
 > Initializes a new PKPassLocation object with the given `latitude`, `longitude`, `altitude`, and `relevantText`.
 
 **serialized**
+
     serialized(self)
     
 > Returns a JSON-valid `dict` object representing this PKPassLocation. `None` values will not be serialized.
