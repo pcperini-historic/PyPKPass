@@ -107,19 +107,24 @@ A series of Python objects for the construction, management, and serialization o
     
 > Returns a JSON-valid `dict` object representing this PKPass. `None` values will not be serialized.
 
+--
 
 ### PKBoardingPass (PKPass) ###
 - `transitType`: Type of transit.
 
+--
 
 ### PKCoupon (PKPass) ###
 
+--
 
 ### PKEventTicket (PKPass) ###
  
+--
 
 ### PKStoreCard (PKPass) ###
 
+--
 
 ### PKPassBarcode ###
 - `message`: Message or payload to be displayed as a barcode.
@@ -139,6 +144,7 @@ A series of Python objects for the construction, management, and serialization o
 
 > Returns a JSON-valid `dict` object representing this PKPassBarcode. `None` values will not be serialized.
 
+--
 
 ### PKPassField ###
 - `key`: The key must be unique within the scope of the entire pass. For example, “departure-gate”.
@@ -180,6 +186,7 @@ A series of Python objects for the construction, management, and serialization o
 
 - `balance`: Current balance of the store card.
 
+--
 
 ### PKPassLocation ###
 - `latitude`: Latitude, in degrees, of the location.
