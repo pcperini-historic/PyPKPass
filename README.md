@@ -106,19 +106,24 @@ A series of Python objects for the construction, management, and serialization o
     serialized(self)
     
 > Returns a JSON-valid `dict` object representing this PKPass. `None` values will not be serialized.
+
 --
 
 ### PKBoardingPass ###
 - `transitType`: Type of transit.
+
 --
 
 ### PKCoupon ###
+
 --
 
 ### PKEventTicket ###
+
 -- 
 
 ### PKStoreCard ###
+
 --
 
 ### PKPassBarcode ###
@@ -136,8 +141,9 @@ A series of Python objects for the construction, management, and serialization o
 **serialized**
 
     serialized(self)
-    
+
 > Returns a JSON-valid `dict` object representing this PKPassBarcode. `None` values will not be serialized.
+
 --
 
 ### PKPassField ###
@@ -175,10 +181,11 @@ A series of Python objects for the construction, management, and serialization o
 **setBalance**
 
     setBalance(self, balance)
-    
+
 > Sets the balance of this PKPassField. Only appropriate for use with `PKStoreCard`s.
 
 - `balance`: Current balance of the store card.
+
 --
 
 ### PKPassLocation ###
@@ -198,4 +205,5 @@ A series of Python objects for the construction, management, and serialization o
     serialized(self)
     
 > Returns a JSON-valid `dict` object representing this PKPassLocation. `None` values will not be serialized.
+
 --
