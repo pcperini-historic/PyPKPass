@@ -22,7 +22,6 @@ class PKPass(object):
         
         # Visual Appearance
         self.barcode = None
-        self.backFields = []
         self.backgroundColor = None
         self.foregroundColor = None
         self.labelColor = None
