@@ -3,6 +3,10 @@ PyPKPass
 
 A series of Python objects for the construction, management, and serialization of iOS PassKit passes.
 
+### Coming Soon ###
+Builtin support for signing / zipping / transporting PKPasses.
+Pre-rolled Flask-based support for PassKit webServices.
+
 ### PKPass ###
 - `passTypeIdentifier`: Pass type identifier, as issued by Apple. The value must correspond with your signing certificate.
 - `serialNumber`: Serial number that uniquely identifies the pass. No two passes with the same pass type identifier may have the same serial number.
