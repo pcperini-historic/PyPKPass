@@ -4,7 +4,7 @@ PyPKPass
 A series of Python objects for the construction, management, and serialization of iOS PassKit passes.
 
 ### Coming Soon ###
-Builtin support for signing / zipping / transporting PKPasses.
+Builtin support for transporting PKPasses.
 Pre-rolled Flask-based support for PassKit webServices.
 
 ### PKPass ###
