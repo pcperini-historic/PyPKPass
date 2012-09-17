@@ -1,3 +1,9 @@
+import os
+import json
+import time
+import shutil
+import subprocess
+
 from PKPassLocation import PKPassLocation
 from PKPassBarcode import PKPassBarcode
 from PKPassField import PKPassField
@@ -11,6 +17,9 @@ class PKPass(object):
         self.formatVersion = 1
         self.organizationName = ""
         self.teamIdentifier = ""
+        
+        self.iconLocation = ""
+        self.logoLocation = ""
         
         # Web Service
         self.authenticationToken = None
@@ -64,7 +73,6 @@ class PKPass(object):
         self.addField(self.backFields, key, value, label, changeMessage, textAlignment)
         
     def serialized(self):
-        
         # Standard
         serialization = {
             "passTypeIdentifier": self.passTypeIdentifier,
@@ -109,3 +117,92 @@ class PKPass(object):
         serialization[self.passType] = visualAppearance
         
         return serialization
+        
+    def pack(self, outputLocation):
+        outputLocation = os.path.abspath(outputLocation)
+        if os.path.isdir(outputLocation):
+            shutil.rmtree(outputLocation)
+        os.makedirs(outputLocation)
+        
+        passImageLocations = []
+        if self.iconLocation:
+            rootIconLocation = os.path.splitext(self.iconLocation)[0]
+            rootIconExtension = os.path.splitext(self.iconLocation)[1]
+            retinaIconLocation = '%s@2x%s' % (rootIconLocation, rootIconExtension)
+            
+            if os.path.exists(self.iconLocation):
+                passImageLocations.append(self.iconLocation)
+            if os.path.exists(retinaIconLocation):
+                passImageLocations.append(retinaIconLocation)
+            
+        if self.logoLocation:
+            rootLogoLocation = os.path.splitext(self.logoLocation)[0]
+            rootLogoExtension = os.path.splitext(self.logoLocation)[1]
+            retinaLogoLocation = '%s@2x%s' % (rootLogoLocation, rootLogoExtension)
+            
+            if os.path.exists(self.logoLocation):
+                passImageLocations.append(self.logoLocation)
+            if os.path.exists(retinaLogoLocation):
+                passImageLocations.append(retinaLogoLocation)
+            
+        passInfoFileLocation = '%s/pass.json' % (outputLocation)
+        passInfoFile = open(passInfoFileLocation, 'w')
+        json.dump(self.serialized(), passInfoFile)
+        passInfoFile.close()
+        
+        for passImageLocation in passImageLocations:
+            passImageName = os.path.basename(passImageLocation)
+            passImageDestination = '%s/%s' % (outputLocation, passImageName)
+            shutil.copyfile(passImageLocation, passImageDestination)
+        
+    def sign(self, certLocation, certPassword, outputLocation):
+        packageLocation = '/tmp/%d.pass' % (int(time.time()))
+        self.pack(packageLocation)
+        
+        subprocess.call([ # Generate Cert
+            'openssl', 'pkcs12',
+            '-passin', 'pass:%s' % (certPassword),
+            '-in', certLocation,
+            '-clcerts', '-nokeys',
+            '-out', '/tmp/cert.pem'
+        ])
+        
+        subprocess.call([ # Generate Key
+            'openssl', 'pkcs12',
+            '-passin', 'pass:%s' % (certPassword),
+            '-in', certLocation,
+            '-nocerts',
+            '-out', '/tmp/key.pem'
+        ])
+        
+        manifest = {}
+        for fileName in os.listdir(packageLocation):
+            hashOutput = subprocess.check_output([
+                'openssl', 'sha1',
+                fileName
+            ])
+            hashedFileName = hashOutput.split(' ')[-1].strip()
+            manifest[fileName] = hashedFileName
+            
+        manifestFileLocation = '%s/manifest.json' % (packageLocation)
+        manifestFile = open(manifestFileLocation, 'w')
+        json.dump(manifest, manifestFile)
+        manifestFile.close()
+        
+        subprocess.call([ # Sign Package
+            'openssl', 'smime',
+            '-passin', 'pass:%s' % (certPassword),
+            '-binary', '-sign',
+            '-signer', '/tmp/cert.pem',
+            '-inkey', '/tmp/key.pem',
+            '-in', '%s/manifest.json' % (packageLocation),
+            '-out', '%s/signature' % (packageLocation),
+            'xs-outform', 'DER'
+        ])
+        
+        outputLocation = os.path.abspath(outputLocation)
+        subprocess.call([ # Zip Pass
+            'zip', outputLocation, packageLocation
+        ])
+        
+        shutil.rmtree(packageLocation)

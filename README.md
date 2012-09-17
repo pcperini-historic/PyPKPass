@@ -13,6 +13,9 @@ Pre-rolled Flask-based support for PassKit webServices.
 - `organizationName`: Display name of the organization that originated and signed the pass.
 - `teamIdentifier`: Team identifier of the organization that originated and signed the pass, as issued by Apple.
 
+- `iconLocation`: The Unix path of the pass' icon. Standard @2x scaling name schemes apply.
+- `logoLocation`: The Unix path of the pass' logo. Standard @2x scaling name schemes apply.
+
 - `authenticationToken`: The authentication token to use with the web service.
 - `webServiceURL`: The URL of a web service that conforms to the API described in [Pass Kit Web Service Reference](https://developer.apple.com/library/prerelease/ios/documentation/PassKit/Reference/PassKit_WebService/WebService.html#//apple_ref/doc/uid/TP40011988). The web service must use the HTTPS protocol and includes the leading https://.
 
@@ -110,6 +113,18 @@ Pre-rolled Flask-based support for PassKit webServices.
     serialized(self)
     
 > Returns a JSON-valid `dict` object representing this PKPass. `None` values will not be serialized.
+
+**pack**
+
+    pack(self, outputLocation)
+    
+> Creates a package-style directory containing this pass, serialized into `pass.json`, its icon files, and its logo files.
+
+**sign**
+
+    sign(self, certLocation, certPassword, outputLocation)
+    
+> Creates a signed, compressed `.pkpass` file containing this pass' package.
 
 --
 
