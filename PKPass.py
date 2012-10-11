@@ -83,7 +83,7 @@ class PKPass(object):
         }
         
         # Web Services
-        if self.authenticationToken and webServiceURL:
+        if self.authenticationToken and self.webServiceURL:
             webService = {
                 "authenticationToken":  self.authenticationToken,
                 "webServiceURL":        self.webServiceURL
