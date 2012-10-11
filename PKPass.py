@@ -201,10 +201,11 @@ class PKPass(object):
             '-out', '%s/signature' % (packageLocation),
             'xs-outform', 'DER'
         ])
-        
+
         outputLocation = os.path.abspath(outputLocation)
-        subprocess.call([ # Zip Pass
-            'zip', outputLocation, packageLocation
+        os.chdir(packageLocation)
+        subprocess.call([  # Zip Pass
+            'zip', outputLocation, '*'
         ])
         
         shutil.rmtree(packageLocation)
