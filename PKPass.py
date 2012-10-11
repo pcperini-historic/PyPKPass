@@ -17,7 +17,8 @@ class PKPass(object):
         self.formatVersion = 1
         self.organizationName = ""
         self.teamIdentifier = ""
-        
+        self.description = ""
+
         self.iconLocation = ""
         self.logoLocation = ""
         
@@ -79,7 +80,8 @@ class PKPass(object):
             "formatVersion":      self.formatVersion,
             "organizationName":   self.organizationName,
             "serialNumber":       self.serialNumber,
-            "teamIdentifier":     self.teamIdentifier
+            "teamIdentifier":     self.teamIdentifier,
+            "description":        self.description
         }
         
         # Web Services
