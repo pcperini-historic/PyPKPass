@@ -218,12 +218,12 @@ class PKPass(object):
             if hasattr(subprocess, 'check_output'):
                 hashOutput = subprocess.check_output([
                     'openssl', 'sha1',
-                    fileName
+                    '%s/%s' % (packageLocation, fileName)
                 ])
             else:
                 hashOutput = check_output([
                     'openssl', 'sha1',
-                    fileName
+                    '%s/%s' % (packageLocation, fileName)
                 ])
             hashedFileName = hashOutput.split(' ')[-1].strip()
             manifest[fileName] = hashedFileName
