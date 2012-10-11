@@ -8,6 +8,41 @@ from PKPassLocation import PKPassLocation
 from PKPassBarcode import PKPassBarcode
 from PKPassField import PKPassField
 
+
+# provides compatibility with python < 2.7
+def check_output(*popenargs, **kwargs):
+    r"""Run command with arguments and return its output as a byte string.
+
+    If the exit code was non-zero it raises a CalledProcessError.  The
+    CalledProcessError object will have the return code in the returncode
+    attribute and output in the output attribute.
+
+    The arguments are the same as for the Popen constructor.  Example:
+
+    >>> check_output(["ls", "-l", "/dev/null"])
+    'crw-rw-rw- 1 root root 1, 3 Oct 18  2007 /dev/null\n'
+
+    The stdout argument is not allowed as it is used internally.
+    To capture standard error in the result, use stderr=STDOUT.
+
+    >>> check_output(["/bin/sh", "-c",
+    ...               "ls -l non_existent_file ; exit 0"],
+    ...              stderr=STDOUT)
+    'ls: non_existent_file: No such file or directory\n'
+    """
+    if 'stdout' in kwargs:
+        raise ValueError('stdout argument not allowed, it will be overridden.')
+    process = subprocess.Popen(stdout=subprocess.PIPE, *popenargs, **kwargs)
+    output, unused_err = process.communicate()
+    retcode = process.poll()
+    if retcode:
+        cmd = kwargs.get("args")
+        if cmd is None:
+            cmd = popenargs[0]
+        raise subprocess.CalledProcessError(retcode, cmd)
+    return output
+
+
 class PKPass(object):
     def __init__(self, passTypeIdentifier, serialNumber):
         # Standard
@@ -17,7 +52,8 @@ class PKPass(object):
         self.formatVersion = 1
         self.organizationName = ""
         self.teamIdentifier = ""
-        
+        self.description = ""
+
         self.iconLocation = ""
         self.logoLocation = ""
         
@@ -79,11 +115,12 @@ class PKPass(object):
             "formatVersion":      self.formatVersion,
             "organizationName":   self.organizationName,
             "serialNumber":       self.serialNumber,
-            "teamIdentifier":     self.teamIdentifier
+            "teamIdentifier":     self.teamIdentifier,
+            "description":        self.description
         }
         
         # Web Services
-        if self.authenticationToken and webServiceURL:
+        if self.authenticationToken and self.webServiceURL:
             webService = {
                 "authenticationToken":  self.authenticationToken,
                 "webServiceURL":        self.webServiceURL
@@ -177,10 +214,17 @@ class PKPass(object):
         
         manifest = {}
         for fileName in os.listdir(packageLocation):
-            hashOutput = subprocess.check_output([
-                'openssl', 'sha1',
-                fileName
-            ])
+            # python 2.7 or greater
+            if hasattr(subprocess, 'check_output'):
+                hashOutput = subprocess.check_output([
+                    'openssl', 'sha1',
+                    '%s/%s' % (packageLocation, fileName)
+                ])
+            else:
+                hashOutput = check_output([
+                    'openssl', 'sha1',
+                    '%s/%s' % (packageLocation, fileName)
+                ])
             hashedFileName = hashOutput.split(' ')[-1].strip()
             manifest[fileName] = hashedFileName
             
@@ -199,10 +243,11 @@ class PKPass(object):
             '-out', '%s/signature' % (packageLocation),
             'xs-outform', 'DER'
         ])
-        
+
         outputLocation = os.path.abspath(outputLocation)
-        subprocess.call([ # Zip Pass
-            'zip', outputLocation, packageLocation
+        os.chdir(packageLocation)
+        subprocess.call([  # Zip Pass
+            'zip', outputLocation, '*'
         ])
         
         shutil.rmtree(packageLocation)
