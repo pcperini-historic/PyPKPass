@@ -26,7 +26,7 @@ class PKPass(object):
         self.logoLocation = ""
         self.thumbnailLocation = ""
         self.stripLocation = ""
-        self.FooterLocation = ""
+        self.footerLocation = ""
         
         # Web Service
         self.authenticationToken = None
