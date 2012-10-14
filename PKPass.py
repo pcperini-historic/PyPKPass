@@ -105,6 +105,16 @@ class PKPass(object):
         # Visual Appearance
         if self.barcode:
             serialization["barcode"] = self.barcode.serialized()
+        
+        if self.backgroundColor:
+            serialization["backgroundColor"] = self.backgroundColor
+        if self.foregroundColor:
+            serialization["foregroundColor"] = self.foregroundColor
+        if self.labelColor:
+            serialization["labelColor"] = self.labelColor
+            
+        if self.logoText:
+            serialization["logoText"] = self.logoText
             
         visualAppearance = {}
             
