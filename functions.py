@@ -1,3 +1,5 @@
+import subprocess
+
 # provides compatibility with python < 2.7
 def check_output(*popenargs, **kwargs):
     r"""Run command with arguments and return its output as a byte string.
@@ -19,6 +21,9 @@ def check_output(*popenargs, **kwargs):
     ...              stderr=STDOUT)
     'ls: non_existent_file: No such file or directory\n'
     """
+    if hasattr(subprocess, 'check_output'):
+        return subprocess.check_output(*popenargs, **kwargs)
+    
     if 'stdout' in kwargs:
         raise ValueError('stdout argument not allowed, it will be overridden.')
     process = subprocess.Popen(stdout=subprocess.PIPE, *popenargs, **kwargs)
