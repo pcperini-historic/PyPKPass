@@ -163,21 +163,23 @@ class PKPass(object):
         packageLocation = '/tmp/%d.pass' % (int(time.time()))
         self.pack(packageLocation)
         
+        certPemLocation = '%s/cert.pem' % (packageLocation)
         subprocess.call([ # Generate Cert
             'openssl', 'pkcs12',
             '-passin', 'pass:%s' % (certPassword),
             '-in', certLocation,
             '-clcerts', '-nokeys',
-            '-out', '/tmp/cert.pem'
+            '-out', certPemLocation
         ])
         
+        keyPemLocation = '%s/key.pem' % (packageLocation)
         subprocess.call([ # Generate Key
             'openssl', 'pkcs12',
             '-passin', 'pass:%s' % (certPassword),
             '-passout', 'pass:%s' % (certPassword),
             '-in', certLocation,
             '-nocerts',
-            '-out', '/tmp/key.pem'
+            '-out', keyPemLocation
         ])
         
         manifest = {}
@@ -199,8 +201,8 @@ class PKPass(object):
             'openssl', 'smime',
             '-passin', 'pass:%s' % (certPassword),
             '-binary', '-sign',
-            '-signer', '/tmp/cert.pem',
-            '-inkey', '/tmp/key.pem',
+            '-signer', certPemLocation,
+            '-inkey', keyPemLocation,
             '-in', '%s/manifest.json' % (packageLocation),
             '-out', '%s/signature' % (packageLocation),
             '-outform', 'DER'

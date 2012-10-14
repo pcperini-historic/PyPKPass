@@ -5,13 +5,13 @@ def gather_image_locations(imageLocation):
     if not imageLocation:
         return []
 
-    rootImageLocation = os.path.splitext(self.imageLocation)[0]
-    rootImageExtension = os.path.splitext(self.imageLocation)[1]
+    rootImageLocation = os.path.splitext(imageLocation)[0]
+    rootImageExtension = os.path.splitext(imageLocation)[1]
     retinaImageLocation = '%s@2x%s' % (rootImageLocation, rootImageExtension)
     
     imageLocations = []
-    if os.path.exists(self.imageLocation):
-        imageLocations.append(self.imageLocation)
+    if os.path.exists(imageLocation):
+        imageLocations.append(imageLocation)
     if os.path.exists(retinaImageLocation):
         imageLocations.append(retinaImageLocation)
 
