@@ -2,6 +2,7 @@ import os
 import json
 import time
 import shutil
+import zipfile
 import functions
 import subprocess
 
@@ -181,16 +182,11 @@ class PKPass(object):
         
         manifest = {}
         for fileName in os.listdir(packageLocation):
-            if hasattr(subprocess, 'check_output'): # python 2.7 or greater
-                hashOutput = subprocess.check_output([
-                    'openssl', 'sha1',
-                    '%s/%s' % (packageLocation, fileName)
-                ])
-            else:
-                hashOutput = functions.check_output([
-                    'openssl', 'sha1',
-                    '%s/%s' % (packageLocation, fileName)
-                ])
+            hashOutput = functions.check_output([
+                'openssl', 'sha1',
+                '%s/%s' % (packageLocation, fileName)
+            ])
+
             hashedFileName = hashOutput.split(' ')[-1].strip()
             manifest[fileName] = hashedFileName
             
@@ -207,13 +203,18 @@ class PKPass(object):
             '-inkey', '/tmp/key.pem',
             '-in', '%s/manifest.json' % (packageLocation),
             '-out', '%s/signature' % (packageLocation),
-            'xs-outform', 'DER'
+            '-outform', 'DER'
         ])
-
-        outputLocation = os.path.abspath(outputLocation)
+        
+        files = functions.check_output([ # Gather Pass Contents
+            'ls', '-r', packageLocation
+        ])
+        files = [file for file in files.split('\n')[:-1]]
+        
+        # Zip Package
         os.chdir(packageLocation)
-        subprocess.call([  # Zip Pass
-            'zip', outputLocation, '*'
-        ])
+        zipOutputFile = zipfile.ZipFile(outputLocation, 'w')
+        for file in files:
+            zipOutputFile.write(file)
         
         shutil.rmtree(packageLocation)
