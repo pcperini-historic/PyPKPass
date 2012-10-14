@@ -24,6 +24,9 @@ class PKPass(object):
 
         self.iconLocation = ""
         self.logoLocation = ""
+        self.thumbnailLocation = ""
+        self.stripLocation = ""
+        self.FooterLocation = ""
         
         # Web Service
         self.authenticationToken = None
@@ -140,25 +143,11 @@ class PKPass(object):
         os.makedirs(outputLocation)
         
         passImageLocations = []
-        if self.iconLocation:
-            rootIconLocation = os.path.splitext(self.iconLocation)[0]
-            rootIconExtension = os.path.splitext(self.iconLocation)[1]
-            retinaIconLocation = '%s@2x%s' % (rootIconLocation, rootIconExtension)
-            
-            if os.path.exists(self.iconLocation):
-                passImageLocations.append(self.iconLocation)
-            if os.path.exists(retinaIconLocation):
-                passImageLocations.append(retinaIconLocation)
-            
-        if self.logoLocation:
-            rootLogoLocation = os.path.splitext(self.logoLocation)[0]
-            rootLogoExtension = os.path.splitext(self.logoLocation)[1]
-            retinaLogoLocation = '%s@2x%s' % (rootLogoLocation, rootLogoExtension)
-            
-            if os.path.exists(self.logoLocation):
-                passImageLocations.append(self.logoLocation)
-            if os.path.exists(retinaLogoLocation):
-                passImageLocations.append(retinaLogoLocation)
+        passImageLocations.extend(functions.gather_image_locations(self.iconLocation))
+        passImageLocations.extend(functions.gather_image_locations(self.logoLocation))
+        passImageLocations.extend(functions.gather_image_locations(self.thumbnailLocation))
+        passImageLocations.extend(functions.gather_image_locations(self.stripLocation))
+        passImageLocations.extend(functions.gather_image_locations(self.footerLocation))
             
         passInfoFileLocation = '%s/pass.json' % (outputLocation)
         passInfoFile = open(passInfoFileLocation, 'w')

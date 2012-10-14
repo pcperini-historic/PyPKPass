@@ -1,4 +1,21 @@
+import os
 import subprocess
+
+def gather_image_locations(imageLocation):
+    if not imageLocation:
+        return []
+
+    rootImageLocation = os.path.splitext(self.imageLocation)[0]
+    rootImageExtension = os.path.splitext(self.imageLocation)[1]
+    retinaImageLocation = '%s@2x%s' % (rootImageLocation, rootImageExtension)
+    
+    imageLocations = []
+    if os.path.exists(self.imageLocation):
+        imageLocations.append(self.imageLocation)
+    if os.path.exists(retinaImageLocation):
+        imageLocations.append(retinaImageLocation)
+
+    return imageLocations
 
 # provides compatibility with python < 2.7
 def check_output(*popenargs, **kwargs):

@@ -15,6 +15,9 @@ Pre-rolled Flask-based support for PassKit webServices.
 
 - `iconLocation`: The Unix path of the pass' icon. Standard @2x scaling name schemes apply.
 - `logoLocation`: The Unix path of the pass' logo. Standard @2x scaling name schemes apply.
+- `thumbnailLocation`: The Unix path of the pass' thumbnail. Standard @2x scaling name schemes apply.
+- `stripLocation`: The Unix path of the pass' strip image. Standard @2x scaling name schemes apply.
+- `footerLocation`: The Unix path of the pass' footer. Standard @2x scaling name schemes apply.
 
 - `authenticationToken`: The authentication token to use with the web service.
 - `webServiceURL`: The URL of a web service that conforms to the API described in [Pass Kit Web Service Reference](https://developer.apple.com/library/prerelease/ios/documentation/PassKit/Reference/PassKit_WebService/WebService.html#//apple_ref/doc/uid/TP40011988). The web service must use the HTTPS protocol and includes the leading https://.
