@@ -154,6 +154,10 @@ class PKPass(object):
         json.dump(self.serialized(), passInfoFile)
         passInfoFile.close()
         
+        subprocess.call([ # Set Pass Info File Permissions
+            'chmod', '777', passInfoFileLocation
+        ])
+        
         for passImageLocation in passImageLocations:
             passImageName = os.path.basename(passImageLocation)
             passImageDestination = '%s/%s' % (outputLocation, passImageName)
@@ -163,7 +167,7 @@ class PKPass(object):
         packageLocation = '/tmp/%d.pass' % (int(time.time()))
         self.pack(packageLocation)
         
-        certPemLocation = '%s/cert.pem' % (packageLocation)
+        certPemLocation = '/tmp/cert.pem'
         subprocess.call([ # Generate Cert
             'openssl', 'pkcs12',
             '-passin', 'pass:%s' % (certPassword),
@@ -172,7 +176,7 @@ class PKPass(object):
             '-out', certPemLocation
         ])
         
-        keyPemLocation = '%s/key.pem' % (packageLocation)
+        keyPemLocation = '/tmp/key.pem'
         subprocess.call([ # Generate Key
             'openssl', 'pkcs12',
             '-passin', 'pass:%s' % (certPassword),
@@ -196,6 +200,9 @@ class PKPass(object):
         manifestFile = open(manifestFileLocation, 'w')
         json.dump(manifest, manifestFile)
         manifestFile.close()
+        subprocess.call([ # Set Manifest File Permissions
+            'chmod', '777', manifestFileLocation
+        ])
         
         subprocess.call([ # Sign Package
             'openssl', 'smime',
@@ -206,6 +213,10 @@ class PKPass(object):
             '-in', '%s/manifest.json' % (packageLocation),
             '-out', '%s/signature' % (packageLocation),
             '-outform', 'DER'
+        ])
+        subprocess.call([ # Set Signature File Permissions
+            'chmod', '777',
+            '%s/signature' % (packageLocation)
         ])
         
         files = functions.check_output([ # Gather Pass Contents
