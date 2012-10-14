@@ -175,6 +175,7 @@ class PKPass(object):
         subprocess.call([ # Generate Key
             'openssl', 'pkcs12',
             '-passin', 'pass:%s' % (certPassword),
+            '-passout', 'pass:%s' % (certPassword),
             '-in', certLocation,
             '-nocerts',
             '-out', '/tmp/key.pem'
