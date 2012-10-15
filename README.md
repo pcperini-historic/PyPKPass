@@ -8,12 +8,11 @@ Builtin support for transporting PKPasses.
 Pre-rolled Flask-based support for PassKit webServices.
 
 ### A Certified Mess ###
-Like all Apple endeavors, the amount of signature hoops one must jump through to create a `.pkpass` is immense. However, PyPKPass attempts to reduce the amount of strife on you by requiring only 2 files for certification.
+Like all Apple endeavors, the amount of signature hoops one must jump through to create a `.pkpass` is immense. However, PyPKPass attempts to reduce the amount of strife on you by requiring only 1 file for certification.
 
-1. The WWDR Certificate, in `.pem` format. This is a global certificate, and cand be found [here](http://developer.apple.com/certificationauthority/AppleWWDRCA.cer). (Warning: I believe developer credentials are required)
-2. The private key of your pass type, in `.p12` format. This can be gotten by opening Keychain Access.app, finding your Pass Type ID certificate (which you made [here](https://developer.apple.com/ios/manage/passtypeids/index.action), right?), and exporting the _PRIVATE KEY_ as a `.p12` file.
+> The private key of your pass type, in `.p12` format. This can be gotten by opening Keychain Access.app, finding your Pass Type ID certificate (which you made [here](https://developer.apple.com/ios/manage/passtypeids/index.action), right?), and exporting the _PRIVATE KEY_ as a `.p12` file.
 
-You'll need both of these files for signing passes. If you have any problems, Google around (there's plenty of tutorials out there) or feel free to email me.
+You'll need this files for signing passes. Optionally, you can provide your own WWDR certificate. If you have any problems, Google around (there's plenty of tutorials out there) or feel free to email me.
 
 ### PKPass ###
 - `passTypeIdentifier`: Pass type identifier, as issued by Apple. The value must correspond with your signing certificate.
@@ -133,7 +132,7 @@ You'll need both of these files for signing passes. If you have any problems, Go
 
 **sign**
 
-    sign(self, certLocation, certPassword, outputLocation)
+    sign(self, certLocation, certPassword, outputLocation, wwdrCertLocation = 'WWDR.pem')
     
 > Creates a signed, compressed `.pkpass` file containing this pass' package.
 

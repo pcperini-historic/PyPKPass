@@ -159,7 +159,7 @@ class PKPass(object):
             passImageDestination = '%s/%s' % (outputLocation, passImageName)
             shutil.copyfile(passImageLocation, passImageDestination)
         
-    def sign(self, wwdrCertLocation, certLocation, certPassword, outputLocation):
+    def sign(self, certLocation, certPassword, outputLocation, wwdrCertLocation = 'WWDR.pem'):
         packageLocation = '/tmp/%d.pass' % (int(time.time()))
         self.pack(packageLocation)
         
